@@ -113,41 +113,38 @@
 
   // Produce a duplicate-free version of the array.
   _.uniq = function(array, isSorted, iterator) {
-    // var arr = [];
-    // var obj = {};
-    // for (var i = 0; i < array.length; i++) {
-    //   if (obj[array[i]]) {
-    //   } else { 
-    //   obj[array[i]] = 1;
-    //   }
-    // }
-    // for (var key in obj) {
-    //   arr.push(parseInt(key));
-    // }
-    // return arr;
     var arr = [];
-    var obj = {};
+    var arr2 = [];
     if (iterator) {
+      // new array of iterator values called arr
+      // find unique values from arr 
+      // apply arr value index to original array, return value from that index
       for (var i = 0; i < array.length; i++) {
-        iterator(array[i]);
-        if (obj[array[i]]) {
-        } else { 
-        obj[array[i]] = 1;
+        if (!arr.includes(iterator(array[i]))) {
+          arr.push(iterator(array[i]));
+          arr2.push(array[i]);
         }
       }
-      for (var key in obj) {
-        arr.push(parseInt(key));
-      }
-      return arr;
+      return arr2;
+  }
+  for (var i = 0; i < array.length; i++) {
+    if (!arr.includes(array[i])) {
+      arr.push(array[i]);
     }
-  };
-
+  }
+  return arr;
+}
 
   // Return the results of applying an iterator to each element.
-  _.map = function(collection, iterator) {
     // map() is a useful primitive iteration function that works a lot
     // like each(), but in addition to running the operation on all
     // the members, it also maintains an array of results.
+  _.map = function(collection, iterator) {
+    var arr = [];
+    for (var i = 0; i < collection.length; i++) {
+      arr.push(iterator(collection[i]));
+    }
+    return arr;
   };
 
   /*
@@ -159,10 +156,11 @@
   // Takes an array of objects and returns and array of the values of
   // a certain property in it. E.g. take an array of people and return
   // an array of just their ages
-  _.pluck = function(collection, key) {
-    // TIP: map is really handy when you want to transform an array of
+  // TIP: map is really handy when you want to transform an array of
     // values into a new array of values. _.pluck() is solved for you
     // as an example of this.
+  _.pluck = function(collection, key) {
+
     return _.map(collection, function(item) {
       return item[key];
     });
@@ -189,6 +187,17 @@
   //   }); // should be 5, regardless of the iterator function passed in
   //          No accumulator is given so the first element is used.
   _.reduce = function(collection, iterator, accumulator) {
+    if (accumulator || accumulator === 0) {
+      for (var i = 0; i < collection.length; i++) {
+        accumulator = iterator(accumulator, collection[i], collection);
+      }
+      return accumulator;
+    }
+    var newAcc = collection[0];
+    for (var i = 1; i < collection.length; i++) {
+      newAcc = iterator(newAcc, collection[i], collection )
+    }
+    return newAcc;
   };
 
   // Determine if the array or object contains a given value (using `===`).
