@@ -222,14 +222,42 @@
 
 
   // Determine whether all of the elements match a truth test.
+  // TIP: Try re-using reduce() here.
   _.every = function(collection, iterator) {
-    // TIP: Try re-using reduce() here.
+    if (iterator !== undefined) {
+       for (var i = 0; i < collection.length; i++) {
+         if (!iterator(collection[i])) {
+           return false;
+         }
+       }
+       return true;
+    }
+    for (var j = 0; j < collection.length; j++) {
+      if (collection[j] === false) {
+        return false;
+      }
+    }
+    return true;
   };
 
   // Determine whether any of the elements pass a truth test. If no iterator is
   // provided, provide a default one
+  // TIP: There's a very clever way to re-use every() here.
   _.some = function(collection, iterator) {
-    // TIP: There's a very clever way to re-use every() here.
+     if (iterator !== undefined || collection.length === 0) {
+       for (var i = 0; i < collection.length; i++) {
+         if (iterator(collection[i])) {
+           return true;
+         }
+       }
+       return false;
+     }
+     for (var j = 0; j < collection.length; j++) {
+       if (collection[j] === true) {
+         return true;
+       }
+     }
+     return false;
   };
 
 
