@@ -345,6 +345,19 @@
   // already computed the result for the given argument and return that value
   // instead if possible.
   _.memoize = function(func) {
+
+    var memos = {};
+
+    return function() {
+      // arguments (array like object)[3, 4]
+      var serialization = JSON.stringify(arguments);
+      // serialization {0: 3, 1: 4}
+      if(!memos[serialization]){
+        memos[serialization] = func.apply(this, arguments);
+      } 
+      return memos[serialization];
+    };
+
   };
 
   // Delays a function for the given number of milliseconds, and then calls
